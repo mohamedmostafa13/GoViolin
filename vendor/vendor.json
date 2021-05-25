@@ -6,5 +6,5 @@
              "install" : [ "./..." ],
              "goVersion": "go1.6"
          },
-	"rootPath": "github.com/Rosalita/GoViolin"
+	"rootPath": "github.com/a7medayman6/GoViolin"
 }
