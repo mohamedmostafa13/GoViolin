@@ -11,8 +11,11 @@ WORKDIR /build
 COPY . .
 
 # Set env variables for go
+# OS
 ENV GOOS=linux
+# GO Module
 ENV GO111MODULE=on
+
 ENV CGO_ENABLED=0
 
 # Build the go application
