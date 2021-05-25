@@ -39,7 +39,7 @@ pipeline
             steps
             {
                 sh "docker rmi $IMAGE:$BUILD_NUMBER"
-                sh "docker rmi $imagIMAGEename:latest"
+                sh "docker rmi $IMAGE:latest"
             }
         }
     }
