@@ -12,53 +12,43 @@ pipeline
         stage('Build')
         {
             steps
-            {   
-                script 
+            {   try
                 {
-                    DOCKER_IMAGE = docker.build IMAGE
+                    script 
+                    {
+                        DOCKER_IMAGE = docker.build IMAGE
+                    }
+                    mail bcc: '', body: 'Your Build Stage in pipeline for GoViolin has been successfully build.', cc: '', from: '', replyTo: '', subject: 'Successful Build - GoViolin Pipeline', to: 'a.ayman6000@gmail.com'
                 }
-                
+                catch
+                {
+                    mail bcc: '', body: 'Your Build Stage in pipeline for GoViolin has been successfully build.', cc: '', from: '', replyTo: '', subject: 'Successful Build - GoViolin Pipeline', to: 'a.ayman6000@gmail.com'
+                }           
             }
         }
-        // send reports after the build stage
-        post
-        {
-            // if success, send an email 
-            success
-            {
-                mail bcc: '', body: 'Your Build Stage in pipeline for GoViolin has been successfully build.', cc: '', from: '', replyTo: '', subject: 'Successful Build - GoViolin Pipeline', to: 'a.ayman6000@gmail.com'
-            }
-            failure
-            {
-                mail bcc: '', body: 'Your Build Stage in pipeline for GoViolin has Failed, Please Review the build.', cc: '', from: '', replyTo: '', subject: 'Build Failed - GoViolin Pipeline', to: 'a.ayman6000@gmail.com'
-            }
-        }
+        
         /*
         stage('Push')
         {
             steps
             {
-                script 
+                try
                 {
-                    docker.withRegistry( '', DOCKERHUB_CREDENTIALS) 
+                    script 
                     {
-                        DOCKER_IMAGE.push("$BUILD_NUMBER")
-                        DOCKER_IMAGE.push('latest')
+                        docker.withRegistry( '', DOCKERHUB_CREDENTIALS) 
+                        {
+                            DOCKER_IMAGE.push("$BUILD_NUMBER")
+                            DOCKER_IMAGE.push('latest')
+                        }
                     }
+                    mail bcc: '', body: 'Your Push Stage in pipeline for GoViolin has been successfully executed.', cc: '', from: '', replyTo: '', subject: 'Successful Build - GoViolin Pipeline', to: 'a.ayman6000@gmail.com'
+
                 }
-            }
-        }
-        // send reports after the push stage
-        post
-        {
-            // if success, send an email 
-            success
-            {
-                mail bcc: '', body: 'Your Push Stage in pipeline for GoViolin has been successfully executed.', cc: '', from: '', replyTo: '', subject: 'Successful Build - GoViolin Pipeline', to: 'a.ayman6000@gmail.com'
-            }
-            failure
-            {
-                mail bcc: '', body: 'Your Push Stage in pipeline for GoViolin has Failed, Please Review the stage.', cc: '', from: '', replyTo: '', subject: 'Build Failed - GoViolin Pipeline', to: 'a.ayman6000@gmail.com'
+                catch
+                {
+                    mail bcc: '', body: 'Your Push Stage in pipeline for GoViolin has Failed, Please Review the stage.', cc: '', from: '', replyTo: '', subject: 'Build Failed - GoViolin Pipeline', to: 'a.ayman6000@gmail.com'
+                }
             }
         }
         */
