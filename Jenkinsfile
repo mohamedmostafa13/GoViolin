@@ -36,7 +36,7 @@ pipeline
                 }          
             }
         }
-        
+        /* 
         stage('Push')
         {
             steps
@@ -59,7 +59,7 @@ pipeline
                 }
             }
         }
-        
+        */
         stage('Deploy to Kubernetes')
         {
             steps
