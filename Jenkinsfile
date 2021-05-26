@@ -2,7 +2,7 @@ pipeline
 {
     environment
     {
-        IMAGE = 'a7medayman6/goviolin:latest'
+        IMAGE = 'a7medayman6/goviolin'
         DOCKERHUB_CREDENTIALS = 'dockerhub'
         DOCKER_IMAGE = ''
     }
@@ -42,7 +42,7 @@ pipeline
                 {
                     docker.withRegistry( '', DOCKERHUB_CREDENTIALS) 
                     {
-                        DOCKER_IMAGE.push('latest')
+                        DOCKER_IMAGE.push()
                     }
                 }
             }
@@ -66,7 +66,7 @@ pipeline
         {
             steps
             {
-                sh "docker rmi $IMAGE:latest"
+                sh "docker rmi $IMAGE"
             }
             post
             {
