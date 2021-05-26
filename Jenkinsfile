@@ -68,8 +68,8 @@ pipeline
                 {
                     sh "kubectl apply -f ./${K8S_DEPLOYMENT_FILE}"
                     echo 'GOVIOLIN URL : '
-                    sh "URL=$(minikube service ${K8S_SERVICE} --url)"
-                    ech '${URL}'
+                    URL = sh(script: 'minikube service \${K8S_SERVICE} --url', returnStdout: true)
+                    echo "${URL}"
                     echo 'Sending Success Mail to a.ayman6000@gmail.com ....'
                     echo ''
                     mail bcc: '', body: 'Your Application Has been Successfully Deployed on K8s.', cc: '', from: '', replyTo: '', subject: 'Successful Deployement on Kubernetes, you can access your web App at ${URL} - GoViolin Pipeline', to: 'a.ayman6000@gmail.com'
