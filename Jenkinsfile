@@ -66,6 +66,7 @@ pipeline
             {
                 script
                 {
+                    sh "minikube start"
                     sh "kubectl apply -f ./${K8S_DEPLOYMENT_FILE}"
                     echo 'GOVIOLIN URL : '
                     WEB_APP_URL = sh(script: 'minikube service \${K8S_SERVICE} --url', returnStdout: true)
