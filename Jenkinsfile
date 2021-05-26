@@ -22,15 +22,7 @@ pipeline
             {
                 failure
                 {
-                    publishHTML target: 
-                    [
-                        allowMissing: false,
-                        alwaysLinkToLastBuild: false,
-                        keepAll: true,
-                        reportDir: 'coverage',
-                        reportFiles: 'index.html',
-                        reportName: 'RCov Report'
-                    ]
+                    echo 'Build Failed !'
                 }
             }
         }
@@ -50,54 +42,17 @@ pipeline
             {
                 failure
                 {
-                    publishHTML target: 
-                    [
-                        allowMissing: false,
-                        alwaysLinkToLastBuild: false,
-                        keepAll: true,
-                        reportDir: 'coverage',
-                        reportFiles: 'index.html',
-                        reportName: 'RCov Report'
-                    ]
+                    echo 'Push Failed !'
                 }
             }
         }
-        stage('Remove Docker Images From Lacalhost') 
-        {
-            steps
-            {
-                sh "docker rmi $IMAGE"
-            }
-            post
-            {
-                failure
-                {
-                    publishHTML target: 
-                    [
-                        allowMissing: false,
-                        alwaysLinkToLastBuild: false,
-                        keepAll: true,
-                        reportDir: 'coverage',
-                        reportFiles: 'index.html',
-                        reportName: 'RCov Report'
-                    ]
-                }
-            }
-        }
+       
     }
     post
     {
         success
         {
-            publishHTML target: 
-            [
-                allowMissing: false,
-                alwaysLinkToLastBuild: false,
-                keepAll: true,
-                reportDir: 'coverage',
-                reportFiles: 'index.html',
-                reportName: 'RCov Report'
-            ] 
+            echo 'Succeeded !'
         }
     }
 }

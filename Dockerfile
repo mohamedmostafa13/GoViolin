@@ -21,24 +21,24 @@ ENV CGO_ENABLED=0
 # Build the go application
 RUN go build -o goviolin-main.o .
 
-# RUN mkdir /app
-# WORKDIR /app
+RUN mkdir /app
+WORKDIR /app
 
-# RUN cp /build/goviolin-main.o .
+RUN cp /build/goviolin-main.o .
 
 # ______________________________________
 
 # new stage to minimize the size
-# FROM scratch
+FROM scratch
 
 # Copy the binary file into the new image
-# COPY --from=compileStage /build/goviolin-main.o /
+COPY --from=compileStage /build/goviolin-main.o /
 
 # Copy the nessecery files
-# COPY ./ /
+COPY ./ /
 
 # Expose the port the application will run on
 EXPOSE 8080
 
 # Run the binary file
-ENTRYPOINT [ "/build/goviolin-main.o" ]
+ENTRYPOINT [ "./goviolin-main.o" ]
