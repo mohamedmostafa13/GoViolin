@@ -36,7 +36,7 @@ pipeline
                 }          
             }
         }
-        /*
+        
         stage('Push')
         {
             steps
@@ -52,14 +52,14 @@ pipeline
                         }
                         mail bcc: '', body: 'Your Push Stage in pipeline for GoViolin has been successfully executed.', cc: '', from: '', replyTo: '', subject: 'Successful Build - GoViolin Pipeline', to: 'a.ayman6000@gmail.com'
                     }
-                    catch(alls)
+                    catch(all)
                     {
                         mail bcc: '', body: 'Your Push Stage in pipeline for GoViolin has Failed, Please Review the stage.', cc: '', from: '', replyTo: '', subject: 'Build Failed - GoViolin Pipeline', to: 'a.ayman6000@gmail.com'
                     }
                 }
             }
         }
-        */
+        
         stage('Deploy to Kubernetes')
         {
             steps
