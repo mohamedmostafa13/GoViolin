@@ -28,7 +28,6 @@ pipeline
                 {
                     docker.withRegistry( '', DOCKERHUB_CREDENTIALS) 
                     {
-                        DOCKER_IMAGE.push("$BUILD_NUMBER")
                         DOCKER_IMAGE.push('latest')
                     }
                 }
@@ -38,7 +37,6 @@ pipeline
         {
             steps
             {
-                sh "docker rmi $IMAGE:$BUILD_NUMBER"
                 sh "docker rmi $IMAGE:latest"
             }
         }
