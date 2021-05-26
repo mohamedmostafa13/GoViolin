@@ -27,13 +27,6 @@ pipeline
                 }          
             }
         }
-        stage('Confirm Build')
-        {
-            steps
-            {
-                echo 'Sending Email'
-            }
-        }
         /*
         stage('Push')
         {
@@ -62,9 +55,10 @@ pipeline
         {
             steps
             {
-                sh "docker rmi $IMAGE:$BUILD_NUMBER"
                 sh "docker rmi $IMAGE:latest"
             }
         }
+
+        
     }
 }
