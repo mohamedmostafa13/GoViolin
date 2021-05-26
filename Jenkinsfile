@@ -12,18 +12,19 @@ pipeline
         stage('Build')
         {
             steps
-            {   try
+            {   
+                script 
                 {
-                    script 
+                    try
                     {
                         DOCKER_IMAGE = docker.build IMAGE
+                        mail bcc: '', body: 'Your Build Stage in pipeline for GoViolin has been successfully build.', cc: '', from: '', replyTo: '', subject: 'Successful Build - GoViolin Pipeline', to: 'a.ayman6000@gmail.com'
                     }
-                    mail bcc: '', body: 'Your Build Stage in pipeline for GoViolin has been successfully build.', cc: '', from: '', replyTo: '', subject: 'Successful Build - GoViolin Pipeline', to: 'a.ayman6000@gmail.com'
+                    catch
+                    {
+                        mail bcc: '', body: 'Your Build Stage in pipeline for GoViolin has been successfully build.', cc: '', from: '', replyTo: '', subject: 'Successful Build - GoViolin Pipeline', to: 'a.ayman6000@gmail.com'
+                    }           
                 }
-                catch
-                {
-                    mail bcc: '', body: 'Your Build Stage in pipeline for GoViolin has been successfully build.', cc: '', from: '', replyTo: '', subject: 'Successful Build - GoViolin Pipeline', to: 'a.ayman6000@gmail.com'
-                }           
             }
         }
         
@@ -32,22 +33,23 @@ pipeline
         {
             steps
             {
-                try
+                
+                script 
                 {
-                    script 
+                    try
                     {
                         docker.withRegistry( '', DOCKERHUB_CREDENTIALS) 
                         {
-                            DOCKER_IMAGE.push("$BUILD_NUMBER")
-                            DOCKER_IMAGE.push('latest')
+                        DOCKER_IMAGE.push("$BUILD_NUMBER")
+                        DOCKER_IMAGE.push('latest')
                         }
+                        mail bcc: '', body: 'Your Push Stage in pipeline for GoViolin has been successfully executed.', cc: '', from: '', replyTo: '', subject: 'Successful Build - GoViolin Pipeline', to: 'a.ayman6000@gmail.com'
                     }
-                    mail bcc: '', body: 'Your Push Stage in pipeline for GoViolin has been successfully executed.', cc: '', from: '', replyTo: '', subject: 'Successful Build - GoViolin Pipeline', to: 'a.ayman6000@gmail.com'
-
-                }
-                catch
-                {
-                    mail bcc: '', body: 'Your Push Stage in pipeline for GoViolin has Failed, Please Review the stage.', cc: '', from: '', replyTo: '', subject: 'Build Failed - GoViolin Pipeline', to: 'a.ayman6000@gmail.com'
+    
+                    catch
+                    {
+                        mail bcc: '', body: 'Your Push Stage in pipeline for GoViolin has Failed, Please Review the stage.', cc: '', from: '', replyTo: '', subject: 'Build Failed - GoViolin Pipeline', to: 'a.ayman6000@gmail.com'
+                    }
                 }
             }
         }
