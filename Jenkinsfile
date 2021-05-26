@@ -17,15 +17,23 @@ pipeline
                 {
                     DOCKER_IMAGE = docker.build IMAGE
                 }
-            }
-            post
-            {
-                failure
-                {
-                    echo 'Build Failed !'
-                }
+                
             }
         }
+        // send reports after the build stage
+        post
+        {
+            // if success, send an email 
+            success
+            {
+                mail bcc: '', body: 'Your Build Stage in pipeline for GoViolin has been successfully build.', cc: '', from: '', replyTo: '', subject: 'Successful Build - GoViolin Pipeline', to: 'a.ayman6000@gmail.com'
+            }
+            failure
+            {
+                mail bcc: '', body: 'Your Build Stage in pipeline for GoViolin has Failed, Please Review the build.', cc: '', from: '', replyTo: '', subject: 'Build Failed - GoViolin Pipeline', to: 'a.ayman6000@gmail.com'
+            }
+        }
+        /*
         stage('Push')
         {
             steps
@@ -34,25 +42,33 @@ pipeline
                 {
                     docker.withRegistry( '', DOCKERHUB_CREDENTIALS) 
                     {
-                        DOCKER_IMAGE.push()
+                        DOCKER_IMAGE.push("$BUILD_NUMBER")
+                        DOCKER_IMAGE.push('latest')
                     }
                 }
             }
-            post
+        }
+        // send reports after the push stage
+        post
+        {
+            // if success, send an email 
+            success
             {
-                failure
-                {
-                    echo 'Push Failed !'
-                }
+                mail bcc: '', body: 'Your Push Stage in pipeline for GoViolin has been successfully executed.', cc: '', from: '', replyTo: '', subject: 'Successful Build - GoViolin Pipeline', to: 'a.ayman6000@gmail.com'
+            }
+            failure
+            {
+                mail bcc: '', body: 'Your Push Stage in pipeline for GoViolin has Failed, Please Review the stage.', cc: '', from: '', replyTo: '', subject: 'Build Failed - GoViolin Pipeline', to: 'a.ayman6000@gmail.com'
             }
         }
-       
-    }
-    post
-    {
-        success
+        */
+        stage('Remove Docker Images From Server') 
         {
-            echo 'Succeeded !'
+            steps
+            {
+                sh "docker rmi $IMAGE:$BUILD_NUMBER"
+                sh "docker rmi $IMAGE:latest"
+            }
         }
     }
 }
