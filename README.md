@@ -4,20 +4,36 @@
 
 Currently hosted on Heroku at https://go-violin.herokuapp.com/
 
+# Table of Contencts
+
+1. [Features](#features)
+2. [Run using Docker](#run-docker)
+3. [Enable Jenkins pipeline on your machine](#pipeline)
+4. [Dockeraize GoViolin - How ?](#dockeraize)
+5. [Building the pipeline](#pipeline-build)
+
+<a name="features"></a>
+
+# Features
+
 GoViolin allows practice over both 1 and 2 octaves.
 
-## Contains:
 * Major Scales
 * Harmonic and Melodic Minor scales
 * Arpeggios
 * A set of two part scale duet melodies by Franz Wohlfahrt
 
+<a name="run-docker"></a>
+
 # RUN Using Docker
+
 ```bash
 docker run -p 8080:8080 a7medayman6/goviolin
 ```
 - Now you can access the web app from your browser at http://localhost:8080
 - *NOTE: IF YOU'RE RUNNING ANYTHING ON PORT 8080 CHANGE THE HOST PORT (THE FIRST 8080 IN THE COMMAND) TO ANY OTHER FREE PORT*
+
+<a name="pipeline"></a>
 
 
 # Enable Jenkins pipeline on your machine
@@ -48,8 +64,10 @@ docker run -p 8080:8080 a7medayman6/goviolin
 ## Step 6 - Trigger the pipeline
 - Push something to git repository, or from jenkins click Build now to check that the build is done correctly 
 
+<a name="dockeraize"></a>
 
-# Docker Reverse Engineering - Dockeraize an Existing Application - How ?
+
+# Dockeraize GoViolin - How ?
 **Steps of dockeraizing this application from A to Z**
 
 ## Step 1 - Build Locally
@@ -123,6 +141,8 @@ after building it based on a golang image to a lighter container
 - This will reduce the size down a lot since the intermediate container - golang:alpine - will get removed 
 - So here's the docker file after applying the modifications => [Dockerfile](Dockerfile)
 - Test it again .. It Works ! The size now is 220 MB!
+
+<a name="pipeline-build"></a>
 
 # Building the pipeline
 
