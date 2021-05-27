@@ -18,6 +18,9 @@ ENV GO111MODULE=on
 
 ENV CGO_ENABLED=0
 
+# initialize go
+RUN go mod init
+
 # Build the go application
 RUN go build -o goviolin-main.o .
 
