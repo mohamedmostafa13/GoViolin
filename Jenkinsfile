@@ -45,7 +45,7 @@ pipeline
                     try
                     {
                         sh "docker login -u ${DOCKERHUB_CREDS_USR} -p ${DOCKERHUB_CREDS_PSW}"
-                        sh "docker push ${DOCKER_IMAGE}:latest"
+                        sh "docker push ${IMAGE}:latest"
                         mail bcc: '', body: 'Your Push Stage in pipeline for GoViolin has been successfully executed.', cc: '', from: '', replyTo: '', subject: 'Successful Build - GoViolin Pipeline', to: 'a.ayman6000@gmail.com'
                     }
                     catch(all)
