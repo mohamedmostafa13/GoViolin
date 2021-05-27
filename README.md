@@ -7,10 +7,11 @@ Currently hosted on Heroku at https://go-violin.herokuapp.com/
 # Table of Contencts
 
 1. [Features](#features)
-2. [Run using Docker](#run-docker)
-3. [Enable Jenkins pipeline on your machine](#pipeline)
-4. [Dockeraize GoViolin - How ?](#dockeraize)
-5. [Building the pipeline](#pipeline-build)
+2. [Used DevOps Tools and Technologies](#ci-cd-pipeline)
+3. [Run using Docker](#run-docker)
+4. [Enable Jenkins pipeline on your machine](#pipeline)
+5. [Dockeraize GoViolin - How ?](#dockeraize)
+6. [Building the pipeline](#pipeline-build)
 
 <a name="features"></a>
 
@@ -33,35 +34,48 @@ docker run -p 8080:8080 a7medayman6/goviolin
 - Now you can access the web app from your browser at http://localhost:8080
 - *NOTE: IF YOU'RE RUNNING ANYTHING ON PORT 8080 CHANGE THE HOST PORT (THE FIRST 8080 IN THE COMMAND) TO ANY OTHER FREE PORT*
 
+<a name="ci-cd-pipeline"></a>
+
+# Used DevOps Tools and Technologies 
+
+![](Readme-Images/ci-cd.png)
+
 <a name="pipeline"></a>
 
 
 # Enable Jenkins pipeline on your machine
 
-## Step 0 - Fork and edit
+#### Step 0 - Fork and edit
+
 - Fork the repo and edit *IMAGE* Env variable in [Jenkinsfile](Jenkinsfile) to your dockerhub-username/goviolin
 
-## Step 1 - Install Docker and Jenkins
+#### Step 1 - Install Docker and Jenkins
+
 - Install and Configure [Docker](https://www.docker.com/) and [Jenkins](https://www.jenkins.io/) on your machine.
 
-## Step 2 - Install Jenkins Plugins
+#### Step 2 - Install Jenkins Plugins
+
 - From [Jenkins Plugins](https://plugins.jenkins.io/) install Docker Pipeline, CloudBees Docker Build and Publish plugin, and git
 
-## Step 3 - Credentials and Github Webhook
+#### Step 3 - Credentials and Github Webhook
+
 - Create [credentials on Jenkins](https://www.jenkins.io/doc/book/using/using-credentials/) for DockerHub and GitHub
 - Create [Webhook](https://docs.github.com/en/developers/webhooks-and-events/webhooks/creating-webhooks) on Github
 
-## Step 4 - Create the pipeline
+#### Step 4 - Create the pipeline
+
 - Create a new item on jenkins
 - Give it a name
 - Select pipeline
 
-## Step 5 - Configure the pipeline
+#### Step 5 - Configure the pipeline
+
 - Enable GitHub hook trigger for GITScm polling at Build Triggers
 - Choose Definition Pipeline script from SCM - SCM: Git and add your repository URL
 - Click ok
 
-## Step 6 - Trigger the pipeline
+#### Step 6 - Trigger the pipeline
+
 - Push something to git repository, or from jenkins click Build now to check that the build is done correctly 
 
 <a name="dockeraize"></a>
@@ -70,7 +84,8 @@ docker run -p 8080:8080 a7medayman6/goviolin
 # Dockeraize GoViolin - How ?
 **Steps of dockeraizing this application from A to Z**
 
-## Step 1 - Build Locally
+#### Step 1 - Build Locally
+
 - Find out how to build the app locally, what are the dependencies we need, which programming language
 - After some poking around I figured that I can simply build the application using one command
 ```bash
@@ -81,12 +96,14 @@ go build -o goviolin.o .
 ./goviolin.o
 ```
 
-## Step 2 - Planning Dockerfile
+#### Step 2 - Planning Dockerfile
+
 - Which image should I base my image on ?
 - Do I need to install any dependencies in the container ?
 - I choose golang:alpine image to build on top of it, because it's small and have go already installed which is all I need to build the app
 
-## Step 3 - Write and Test Initial Dockerfile
+#### Step 3 - Write and Test Initial Dockerfile
+
 - Write down the **initial** Dockerfile
 ```docker
 # The base image to build the application on top of
@@ -133,7 +150,8 @@ docker run -p 8082:8080 goviolin
 # I'am running jenkins on port 8080 so am mapping the container port 8080 to host port 8082 
 ```
 
-## Step 4 - Reduce the image size
+#### Step 4 - Reduce the image size
+
 - Currently the image size is approximately 500 MB which is too much in terms of containers
 - So I thought I could use Docker Multi-stagging to move the binary file and it's dependencies 
 after building it based on a golang image to a lighter container
@@ -146,17 +164,25 @@ after building it based on a golang image to a lighter container
 
 # Building the pipeline
 
-## Step 1 - Plan the pipeline
-Push Commits => Source Control Management => Jenkins takes the source code => Jenkins Builds docker image => Jenkins Push to Docker Hub 
-![](Readme-Images/Pipeline.jpg)
+#### Step 1 - Plan the pipeline
 
-## Step 2 - Credentials and Github Webhook
+Push Commits => Source Control Management => Jenkins takes the source code => Jenkins Builds docker image => Jenkins Push to Docker Hub 
+
+
+
+![Pipeline flowchart](Readme-Images/Pipeline.jpg)
+
+
+
+#### Step 2 - Credentials and Github Webhook
+
 - Create [credentials on Jenkins](https://www.jenkins.io/doc/book/using/using-credentials/) for DockerHub and GitHub
 - Create [Webhook](https://docs.github.com/en/developers/webhooks-and-events/webhooks/creating-webhooks) on Github
 
-## Step 3 - Jenkinsfile
-- I am using jenkins declarative pipeline
-- This is how I think when am building a pipeline :
+#### Step 3 - Jenkinsfile
+
+- Using jenkins declarative pipeline
+- Questions to ask when building a pipeline :
     1. What are the stages do I need ?
     2. Diving into each stage independently
     3. What are the ENV variable do I need ?
@@ -166,3 +192,4 @@ Push Commits => Source Control Management => Jenkins takes the source code => Je
     2. push (push the image to the registry)
     3. cleanup (remove the local image)
 - Here is Jenkinsfile after applying the previous steps => [Jenkinsfile](Jenkinsfile)
+
