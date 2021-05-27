@@ -12,6 +12,11 @@ Currently hosted on Heroku at https://go-violin.herokuapp.com/
 4. [Enable Jenkins pipeline on your machine](#pipeline)
 5. [Dockeraize GoViolin - How ?](#dockeraize)
 6. [Building the pipeline](#pipeline-build)
+7. [Deployment on Kubernetes](#k8s-deployment)
+8. [GitHub Actions Workflow](#githubactions)
+9. [Jenkins Console Output](#jenkins-output)
+10. [Success Emails](#emails) 
+11. [Pipeline Features](#pipeline-features)
 
 <a name="features"></a>
 
@@ -45,6 +50,20 @@ docker run -p 8080:8080 a7medayman6/goviolin
 
 # Enable Jenkins pipeline on your machine
 
+**NOTE: THE PUSH STAGE TAKES TIME**
+
+**NOTE: MAKE SURE TO INSTALL AND START minikube ON THE SERVER FOR THE DEPLOYMENT TO WORK PROPERLY**
+
+```BASH
+minikube start
+```
+
+To Get the Live URL using
+
+```bash
+minikube service goviolin-service --url
+```
+
 #### Step 0 - Fork and edit
 
 - Fork the repo and edit *IMAGE* Env variable in [Jenkinsfile](Jenkinsfile) to your dockerhub-username/goviolin
@@ -55,7 +74,12 @@ docker run -p 8080:8080 a7medayman6/goviolin
 
 #### Step 2 - Install Jenkins Plugins
 
-- From [Jenkins Plugins](https://plugins.jenkins.io/) install Docker Pipeline, CloudBees Docker Build and Publish plugin, and git
+##### SKIP THIS STEP IF YOU DON'T WANT TO INSTALL PLUGINS, WITHOUT THIS STEP YOU WILL USE THIS JENKINS FILE THAT USES NO PLUGINS
+
+- Rename [Jenkinsfile](Jenkinsfile) to Jenkinsfile-without-plugins
+- Rename [Jenkinsfile-using-plugins](Jenkinsfile-using-plugins) to Jenkinsfile
+
+- From [Jenkins Plugins](https://plugins.jenkins.io/) install Docker Pipeline, CloudBees Docker Build, and Publish plugin, and git
 
 #### Step 3 - Credentials and Github Webhook
 
@@ -193,3 +217,75 @@ Push Commits => Source Control Management => Jenkins takes the source code => Je
     3. cleanup (remove the local image)
 - Here is Jenkinsfile after applying the previous steps => [Jenkinsfile](Jenkinsfile)
 
+<a name="k8s-deployment"></a>
+
+# Deployment on K8s
+
+[**Deployment File**](deployment.yaml)
+
+- Deployment
+  - Specified 1 replica only for now.
+  - Set the container image to be [a7medayman6/goviolin](https://hub.docker.com/repository/docker/a7medayman6/goviolin) 
+  - Set the container port to be 8080 which is the web app port
+- Service 
+  - Set the service to work with TCP protocol 
+  - the port forwarding to 8082 
+  - the target port to 8080
+  - set a node port to 32000 (this is arbitrary port in the right range)
+  - the type to loadbalancer (to when this get deployed on server not localhost)
+
+Then tested it locally before integrating with jenkins by 
+
+```bash
+kubectl apply -f deployment.yaml
+```
+
+Then Get the Live URL using
+
+```bash
+minikube service goviolin-service --url
+```
+
+
+
+<a name="githubactions"></a>
+
+# Github Actions Workflow
+
+[Workflow Yaml File](.github/workflows/docker-image.yml)
+
+Configured a CI pipeline using github actions to build and push the docker image  to the registry.
+
+<a name="jenkins-output"></a>
+
+# Jenkins Console Output
+
+- Build Stage 
+
+
+
+![](Readme-Images/jenkins-ss-full.png)
+
+ 
+
+- Push and Deploy Stages
+
+  ![](Readme-Images/jenkins-ss-2.png)
+
+<a name="emails"></a>
+
+# Success Emails
+
+
+Build            	      |  Push                      | Deploy            	      
+:-------------------------:|:-------------------------:|:-------------------------:
+![](Readme-Images/email-ss-1.jpeg)  |  ![](Readme-Images/email-ss-2.jpeg) | ![](Readme-Images/email-ss-3.jpeg)
+
+# Pipeline Featuress
+
+On each commit or pull request to the GitHub repo
+
+- Build Dockerimage for GoViolin Web Application
+- Push the Built Image to Dockerhub 
+- Deploy an instance of the application on kubernetes and make it accessible to the web 
+- Also the pipeline reports by email for the success or failure of any stage  
