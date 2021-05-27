@@ -7,7 +7,6 @@ pipeline
         DOCKER_IMAGE = ''
         K8S_DEPLOYMENT_FILE = 'deployment.yaml'
         K8S_SERVICE = 'goviolin-service'
-        WEB_APP_URL = ''
     }
     agent any
     stages
@@ -67,13 +66,10 @@ pipeline
                 script
                 {
                     sh "kubectl apply -f ./${K8S_DEPLOYMENT_FILE}"
-                    sh "minikube start"
-                    echo 'GOVIOLIN URL : '
-                    WEB_APP_URL = sh(script: 'minikube service \${K8S_SERVICE} --url', returnStdout: true)
-                    echo "${WEB_APP_URL}"
+                    
                     echo 'Sending Success Mail to a.ayman6000@gmail.com ....'
                     echo ''
-                    mail bcc: '', body: 'Your Application Has been Successfully Deployed on K8s.', cc: '', from: '', replyTo: '', subject: 'Successful Deployement on Kubernetes, you can access your web App at ${WEB_APP_URL} - GoViolin Pipeline', to: 'a.ayman6000@gmail.com'
+                    mail bcc: '', body: 'Your Application Has been Successfully Deployed on K8s.', cc: '', from: '', replyTo: '', subject: 'Successful Deployement on Kubernetes. To get the Web App URL RUN "minikube service ${K8S_SERVICE} --url" - GoViolin Pipeline', to: 'a.ayman6000@gmail.com'
                     echo 'Mail Sent.'
                 }
             }
