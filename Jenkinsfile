@@ -35,7 +35,7 @@ pipeline
                 }          
             }
         }
-        /* 
+        
         stage('Push')
         {
             steps
@@ -58,7 +58,7 @@ pipeline
                 }
             }
         }
-        */
+        
         stage('Deploy to Kubernetes')
         {
             steps
@@ -69,7 +69,7 @@ pipeline
                     
                     echo 'Sending Success Mail to a.ayman6000@gmail.com ....'
                     echo ''
-                    mail bcc: '', body: 'Your Application Has been Successfully Deployed on K8s.', cc: '', from: '', replyTo: '', subject: 'Successful Deployement on Kubernetes. To get the Web App URL RUN "minikube service ${K8S_SERVICE} --url" - GoViolin Pipeline', to: 'a.ayman6000@gmail.com'
+                    mail bcc: '', body: 'Successful Deployement on Kubernetes. To get the Web App URL RUN "minikube service ${K8S_SERVICE} --url" - GoViolin Pipeline', cc: '', from: '', replyTo: '', subject: 'GoViolin Has been Successfully Deployed on K8s.', to: 'a.ayman6000@gmail.com'
                     echo 'Mail Sent.'
                 }
             }
