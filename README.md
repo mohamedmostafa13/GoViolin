@@ -252,7 +252,7 @@ minikube service goviolin-service --url
 
 # Github Actions Workflow
 
-[Workflow Yaml File](.github/workflows/docker-image.yml)
+[Workflow Yaml File](./.github/workflows/docker-publish.yml)
 
 Configured a CI pipeline using github actions to build and push the docker image  to the registry.
 
